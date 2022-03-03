@@ -30,6 +30,9 @@ jobs:
 
       
       - name: Navigate to countdown page
+        run: cd countdown
+        
+      - name: Verify
         run: ls
       
       - name: Install dependencies
