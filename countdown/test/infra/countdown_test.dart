@@ -7,7 +7,6 @@ class CountdownTimer implements Countdown {
   final _statusController = BehaviorSubject<CountdownStatus>();
 
   @override
-  // TODO: implement duration
   Duration get duration => throw UnimplementedError();
 
   @override
