@@ -44,3 +44,6 @@ jobs:
       # want to change this to 'flutter test'.
       - name: Run tests
         run: flutter test
+        
+      - name: Verify tests coverage
+        run: curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && ./codecov -t ${CODECOVTOKEN}
