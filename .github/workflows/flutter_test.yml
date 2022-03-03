@@ -30,7 +30,7 @@ jobs:
 
       
       - name: Navigate to countdown page
-        run: cd countdown/
+        run: ls
       
       - name: Install dependencies
         run: flutter pub get
