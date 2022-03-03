@@ -59,17 +59,17 @@ class CountdownTimer implements Countdown {
       : CountdownStatus.notStarted;
 
   @override
-  stop() {}
+  stop() {
+    _statusController.add(CountdownStatus.notStarted);
+  }
 }
 
-class TimerMock{
-  
-}
+class TimerMock {}
 
 void main() {
-  late final Countdown countdown;
+  late Countdown countdown;
 
-  setUp(() {
+  setUpAll(() {
     countdown = CountdownTimer();
   });
 
@@ -77,7 +77,6 @@ void main() {
     "Should test if countdown start",
     () {
       countdown.start();
-      expect(actual, matcher)
       expect(countdown.status, CountdownStatus.running);
     },
   );
