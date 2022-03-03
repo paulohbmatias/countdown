@@ -27,13 +27,6 @@ jobs:
         with:
           flutter-version: '2.10.2'
           channel: 'stable'
-
-      
-      - name: Navigate to countdown page
-        run: cd countdown
-        
-      - name: Verify
-        run: ls
       
       - name: Install dependencies
         run: flutter pub get
