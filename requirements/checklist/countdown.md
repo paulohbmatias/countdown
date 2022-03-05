@@ -8,6 +8,7 @@
 - [ ] Reset countdown
 - [ ] Reset countdown
 - [ ] Resume countdown
+- [ ] Change duration
 - [ ] Listen time
 - [ ] Listen status
 - [ ] Get durantion

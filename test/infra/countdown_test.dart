@@ -1,10 +1,20 @@
+import 'dart:async';
+
 import 'package:countdown/countdown.dart';
 import 'package:countdown/src/domain/countdown_status.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:clock/clock.dart';
+
+import 'countdown_test.mocks.dart';
 
 class CountdownTimer implements Countdown {
   final _statusController = BehaviorSubject<CountdownStatus>();
+  void Function(CountdownStatus)? onStatusCallback;
+  void Function(Duration)? onTimeChangedCallback;
+  late Timer timer;
 
   @override
   Duration get duration => throw UnimplementedError();
@@ -17,14 +27,12 @@ class CountdownTimer implements Countdown {
 
   @override
   onStatusChanged(void Function(CountdownStatus) callback) {
-    // TODO: implement onStatusChanged
-    throw UnimplementedError();
+    onStatusCallback = callback;
   }
 
   @override
   onTimeChanged(void Function(Duration) callback) {
-    // TODO: implement onTimeChanged
-    throw UnimplementedError();
+    onTimeChangedCallback = callback;
   }
 
   @override
@@ -49,7 +57,20 @@ class CountdownTimer implements Countdown {
 
   @override
   start() {
+    clock.stopwatch().start();
     _statusController.add(CountdownStatus.running);
+    if (onStatusCallback != null) {
+      onStatusCallback!(_statusController.value);
+    }
+    _listenTime();
+  }
+
+  _listenTime() {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (onTimeChangedCallback != null) {
+        onTimeChangedCallback!(clock.stopwatch().elapsed);
+      }
+    });
   }
 
   @override
@@ -63,20 +84,34 @@ class CountdownTimer implements Countdown {
   }
 }
 
-class TimerMock {}
+abstract class TimerFake {
+  void Function(CountdownStatus) get onStatusChanged;
+  void Function(Duration) get onTimeChanged;
+}
 
+@GenerateMocks([],
+    customMocks: [MockSpec<TimerFake>(returnNullOnMissingStub: false)])
 void main() {
   late Countdown countdown;
+  late TimerFake timerMock;
 
-  setUpAll(() {
+  setUp(() {
     countdown = CountdownTimer();
+    timerMock = MockTimerFake();
   });
 
   test(
     "Should test if countdown start",
     () {
+      when(timerMock.onStatusChanged).thenReturn((p0) {});
+      when(timerMock.onTimeChanged).thenReturn((p0) {});
+
+      countdown.onStatusChanged(timerMock.onStatusChanged);
+      countdown.onTimeChanged(timerMock.onTimeChanged);
       countdown.start();
       expect(countdown.status, CountdownStatus.running);
+      verify(timerMock.onStatusChanged).called(1);
+      verify(timerMock.onTimeChanged).called(greaterThan(0));
     },
   );
 
