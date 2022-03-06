@@ -3,6 +3,8 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:countdown/countdown.dart';
+import 'package:countdown/src/domain/countdown_error.dart';
+import 'package:countdown/src/domain/countdown_exception.dart';
 import 'package:countdown/src/domain/countdown_status.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -44,6 +46,11 @@ class CountdownTimer implements Countdown {
 
   @override
   pause() {
+    if (status == CountdownStatus.notStarted) {
+      throw (CountdownException(
+          description: "Countdown not started",
+          erro: CountdownError.countdownNotInitialized));
+    }
     clock.stopwatch().stop();
     _setStatus(CountdownStatus.paused);
   }
@@ -275,5 +282,10 @@ void main() {
 
     expect(countdown.status, CountdownStatus.running);
     await untilCalled(timerMock.onDone);
+  });
+
+  test("Shoul throw exception if try pause countdonw but it's not initialized",
+      () {
+    expect(() => countdown.pause(), throwsA(isA<CountdownException>()));
   });
 }
