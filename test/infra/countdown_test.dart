@@ -215,4 +215,16 @@ void main() {
     expect(countdown.status, CountdownStatus.running);
     await untilCalled(timerMock.onTimeChanged);
   });
+
+  test("Should test listen status", () async {
+    when(timerMock.onStatusChanged(CountdownStatus.running))
+        .thenReturn((p0) {});
+
+    countdown.onStatusChanged(timerMock.onStatusChanged);
+
+    countdown.start();
+
+    expect(countdown.status, CountdownStatus.running);
+    await untilCalled(timerMock.onStatusChanged(CountdownStatus.running));
+  });
 }
