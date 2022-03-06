@@ -11,7 +11,7 @@
 - [x] Listen time
 - [x] Listen status
 - [x] Get durantion
-- [ ] Get Remaining Duration
+- [x] Get Remaining Duration
 - [ ] Get status
 - [ ] Listen onDone
 

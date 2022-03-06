@@ -14,6 +14,8 @@ import 'countdown_test.mocks.dart';
 
 class CountdownTimer implements Countdown {
   final _statusController = BehaviorSubject<CountdownStatus>();
+  final _durationController = BehaviorSubject<Duration>();
+
   void Function(CountdownStatus)? onStatusCallback;
   void Function(Duration)? onTimeChangedCallback;
   late Timer timer;
@@ -47,7 +49,8 @@ class CountdownTimer implements Countdown {
   }
 
   @override
-  Duration get remaningTime => throw UnimplementedError();
+  Duration get remaningTime =>
+      _durationController.hasValue ? _durationController.value : _duration;
 
   @override
   void reset() {
@@ -82,7 +85,9 @@ class CountdownTimer implements Countdown {
   _listenTime() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (onTimeChangedCallback != null) {
-        onTimeChangedCallback!(clock.stopwatch().elapsed);
+        final elapsed = clock.stopwatch().elapsed;
+        _durationController.add(_duration - elapsed);
+        onTimeChangedCallback!(_durationController.value);
       }
     });
   }
@@ -233,6 +238,12 @@ void main() {
 
   test("Should get duration", () {
     final duration = countdown.duration;
+
+    expect(duration, countDuration);
+  });
+
+  test("Should get remaining duration", () async {
+    final duration = countdown.remaningTime;
 
     expect(duration, countDuration);
   });
