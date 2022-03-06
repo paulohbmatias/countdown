@@ -46,11 +46,7 @@ class CountdownTimer implements Countdown {
 
   @override
   pause() {
-    if (status == CountdownStatus.notStarted) {
-      throw (CountdownException(
-          description: "Countdown not started",
-          erro: CountdownError.countdownNotInitialized));
-    }
+    _verifyInitialized();
     clock.stopwatch().stop();
     _setStatus(CountdownStatus.paused);
   }
@@ -91,6 +87,14 @@ class CountdownTimer implements Countdown {
     }
   }
 
+  _verifyInitialized() {
+    if (status == CountdownStatus.notStarted) {
+      throw (CountdownException(
+          description: "Countdown not started",
+          erro: CountdownError.countdownNotInitialized));
+    }
+  }
+
   _listenTime() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (onTimeChangedCallback != null) {
@@ -116,6 +120,7 @@ class CountdownTimer implements Countdown {
 
   @override
   stop() {
+    _verifyInitialized();
     clock.stopwatch().stop();
     clock.stopwatch().reset();
     _setStatus(CountdownStatus.notStarted);
@@ -287,5 +292,10 @@ void main() {
   test("Shoul throw exception if try pause countdonw but it's not initialized",
       () {
     expect(() => countdown.pause(), throwsA(isA<CountdownException>()));
+  });
+
+  test("Shoul throw exception if try stop countdonw but it's not initialized",
+      () {
+    expect(() => countdown.stop(), throwsA(isA<CountdownException>()));
   });
 }

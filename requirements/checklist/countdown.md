@@ -17,5 +17,4 @@
 
 ### Exception
 - [x] Throw exception when try pause pomodoro but its aren't started
-- [ ] Throw exception when try resume pomodoro but its aren't started
-- [ ] Throw exception when try stop pomodoro but its aren't started
+- [x] Throw exception when try stop pomodoro but its aren't started
