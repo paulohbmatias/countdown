@@ -9,8 +9,8 @@
 - [x] Resume countdown
 - [x] Change duration
 - [x] Listen time
-- [ ] Listen status
-- [ ] Get durantion
+- [x] Listen status
+- [x] Get durantion
 - [ ] Get Remaining Duration
 - [ ] Get status
 - [ ] Listen onDone

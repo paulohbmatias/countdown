@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:countdown/countdown.dart';
@@ -109,9 +110,11 @@ abstract class TimerFake {
 void main() {
   late Countdown countdown;
   late TimerFake timerMock;
+  late Duration countDuration;
 
   setUp(() {
-    countdown = CountdownTimer(const Duration(seconds: 3));
+    countDuration = const Duration(seconds: 3);
+    countdown = CountdownTimer(countDuration);
     timerMock = MockTimerFake();
   });
 
@@ -226,5 +229,11 @@ void main() {
 
     expect(countdown.status, CountdownStatus.running);
     await untilCalled(timerMock.onStatusChanged(CountdownStatus.running));
+  });
+
+  test("Should get duration", () {
+    final duration = countdown.duration;
+
+    expect(duration, countDuration);
   });
 }
