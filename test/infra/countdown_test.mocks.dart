@@ -26,12 +26,11 @@ class MockTimerFake extends _i1.Mock implements _i2.TimerFake {
   }
 
   @override
-  void Function(_i3.CountdownStatus) get onStatusChanged =>
-      (super.noSuchMethod(Invocation.getter(#onStatusChanged),
-              returnValue: (_i3.CountdownStatus __p0) {})
-          as void Function(_i3.CountdownStatus));
-  @override
   void Function(Duration) get onTimeChanged =>
       (super.noSuchMethod(Invocation.getter(#onTimeChanged),
           returnValue: (Duration __p0) {}) as void Function(Duration));
+  @override
+  void onStatusChanged(_i3.CountdownStatus? status) =>
+      super.noSuchMethod(Invocation.method(#onStatusChanged, [status]),
+          returnValueForMissingStub: null);
 }

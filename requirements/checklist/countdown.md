@@ -3,7 +3,7 @@
 ### Accept
 
 - [x] Start countdown
-- [ ] Pause countdown
+- [x] Pause countdown
 - [ ] Stop countdown
 - [ ] Reset countdown
 - [ ] Reset countdown

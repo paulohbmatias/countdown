@@ -89,7 +89,7 @@ class CountdownTimer implements Countdown {
 }
 
 abstract class TimerFake {
-  void Function(CountdownStatus) get onStatusChanged;
+  void onStatusChanged(CountdownStatus status);
   void Function(Duration) get onTimeChanged;
 }
 
@@ -120,8 +120,8 @@ void main() {
   );
 
   test("Should pause countdown", () {
-    when(timerMock.onStatusChanged(CountdownStatus.running)).thenReturn((_) {});
     when(timerMock.onStatusChanged(CountdownStatus.paused)).thenReturn((_) {});
+    when(timerMock.onStatusChanged(CountdownStatus.running)).thenReturn((_) {});
     when(timerMock.onTimeChanged).thenReturn((p0) {});
     countdown.onStatusChanged(timerMock.onStatusChanged);
     countdown.onTimeChanged(timerMock.onTimeChanged);
@@ -130,10 +130,9 @@ void main() {
     countdown.pause();
 
     expect(countdown.status, CountdownStatus.paused);
-    // verify(timerMock.onStatusChanged(CountdownStatus.running)).called(1);
     verify(timerMock.onStatusChanged(CountdownStatus.running)).called(1);
     verify(timerMock.onStatusChanged(CountdownStatus.paused)).called(1);
-    // verify(timerMock.onTimeChanged).called(greaterThan(0));
+    verify(timerMock.onTimeChanged).called(greaterThan(0));
   });
 
   test("Should test if countdown reset", () {
