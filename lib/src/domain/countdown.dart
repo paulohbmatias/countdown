@@ -11,5 +11,5 @@ abstract class Countdown {
   void pause();
   void onTimeChanged(void Function(Duration) callback);
   void onStatusChanged(void Function(CountdownStatus) callback);
-  void onDone();
+  void onDone(void Function() callback);
 }

@@ -18,6 +18,7 @@ class CountdownTimer implements Countdown {
 
   void Function(CountdownStatus)? onStatusCallback;
   void Function(Duration)? onTimeChangedCallback;
+  void Function()? _onDone;
   late Timer timer;
   Duration _duration;
 
@@ -27,9 +28,8 @@ class CountdownTimer implements Countdown {
   Duration get duration => _duration;
 
   @override
-  onDone() {
-    // TODO: implement onDone
-    throw UnimplementedError();
+  onDone(void Function() callback) {
+    _onDone = callback;
   }
 
   @override
@@ -56,6 +56,8 @@ class CountdownTimer implements Countdown {
   void reset() {
     clock.stopwatch().stop();
     clock.stopwatch().reset();
+
+    _durationController.add(duration);
 
     _setStatus(CountdownStatus.notStarted);
   }
@@ -86,6 +88,14 @@ class CountdownTimer implements Countdown {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (onTimeChangedCallback != null) {
         final elapsed = clock.stopwatch().elapsed;
+
+        if (elapsed.isNegative) {
+          if (_onDone != null) {
+            _onDone!();
+          }
+          reset();
+        }
+
         _durationController.add(_duration - elapsed);
         onTimeChangedCallback!(_durationController.value);
       }
@@ -108,6 +118,7 @@ class CountdownTimer implements Countdown {
 abstract class TimerFake {
   void onStatusChanged(CountdownStatus status);
   void Function(Duration) get onTimeChanged;
+  void Function() get onDone;
 }
 
 @GenerateMocks([],
@@ -246,5 +257,23 @@ void main() {
     final duration = countdown.remaningTime;
 
     expect(duration, countDuration);
+  });
+
+  test("Should return the current status", () {
+    final status = countdown.status;
+
+    expect(status, CountdownStatus.notStarted);
+  });
+
+  test("Should test listen onDone", () async {
+    when(timerMock.onDone).thenReturn(() {});
+
+    countdown.onDone(timerMock.onDone);
+
+    countdown.duration = const Duration(seconds: 1);
+    countdown.start();
+
+    expect(countdown.status, CountdownStatus.running);
+    await untilCalled(timerMock.onDone);
   });
 }

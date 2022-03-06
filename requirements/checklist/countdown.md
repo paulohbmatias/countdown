@@ -12,8 +12,8 @@
 - [x] Listen status
 - [x] Get durantion
 - [x] Get Remaining Duration
-- [ ] Get status
-- [ ] Listen onDone
+- [x] Get status
+- [x] Listen onDone
 
 ### Exception
 - [ ] Throw exception when try pause pomodoro but its aren't started
