@@ -31,14 +31,15 @@ void main() {
   test(
     "Should test if countdown start",
     () {
-      when(timerMock.onStatusChanged).thenReturn((p0) {});
+      when(timerMock.onStatusChanged(CountdownStatus.running))
+          .thenReturn((p0) {});
       when(timerMock.onTimeChanged).thenReturn((p0) {});
 
       countdown.onStatusChanged(timerMock.onStatusChanged);
       countdown.onTimeChanged(timerMock.onTimeChanged);
       countdown.start();
       expect(countdown.status, CountdownStatus.running);
-      verify(timerMock.onStatusChanged).called(1);
+      verify(timerMock.onStatusChanged(CountdownStatus.running)).called(1);
       verify(timerMock.onTimeChanged).called(greaterThan(0));
     },
   );
