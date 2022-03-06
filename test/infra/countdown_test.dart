@@ -38,10 +38,7 @@ class CountdownTimer implements Countdown {
   @override
   pause() {
     clock.stopwatch().stop();
-    _statusController.add(CountdownStatus.paused);
-    if (onStatusCallback != null) {
-      onStatusCallback!(_statusController.value);
-    }
+    _setStatus(CountdownStatus.paused);
   }
 
   @override
@@ -49,8 +46,11 @@ class CountdownTimer implements Countdown {
   Duration get remaningTime => throw UnimplementedError();
 
   @override
-  reset() {
-    _statusController.add(CountdownStatus.notStarted);
+  void reset() {
+    clock.stopwatch().stop();
+    clock.stopwatch().reset();
+
+    _setStatus(CountdownStatus.notStarted);
   }
 
   @override
@@ -69,6 +69,13 @@ class CountdownTimer implements Countdown {
     _listenTime();
   }
 
+  void _setStatus(CountdownStatus status) {
+    _statusController.add(status);
+    if (onStatusCallback != null) {
+      onStatusCallback!(_statusController.value);
+    }
+  }
+
   _listenTime() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (onTimeChangedCallback != null) {
@@ -84,7 +91,9 @@ class CountdownTimer implements Countdown {
 
   @override
   stop() {
-    _statusController.add(CountdownStatus.notStarted);
+    clock.stopwatch().stop();
+    clock.stopwatch().reset();
+    _setStatus(CountdownStatus.notStarted);
   }
 }
 
@@ -136,14 +145,33 @@ void main() {
   });
 
   test("Should test if countdown reset", () {
+    when(timerMock.onStatusChanged(CountdownStatus.running)).thenReturn((_) {});
+    when(timerMock.onStatusChanged(CountdownStatus.notStarted))
+        .thenReturn((_) {});
+    when(timerMock.onTimeChanged).thenReturn((p0) {});
+    countdown.onStatusChanged(timerMock.onStatusChanged);
+    countdown.onTimeChanged(timerMock.onTimeChanged);
+
     countdown.start();
     countdown.reset();
+
     expect(countdown.status, CountdownStatus.notStarted);
+    verify(timerMock.onStatusChanged(CountdownStatus.running)).called(1);
+    verify(timerMock.onStatusChanged(CountdownStatus.notStarted)).called(1);
   });
 
   test("Should test if Countdown stop", () {
+    when(timerMock.onStatusChanged(CountdownStatus.running)).thenReturn((_) {});
+    when(timerMock.onStatusChanged(CountdownStatus.notStarted))
+        .thenReturn((_) {});
+
+    countdown.onStatusChanged(timerMock.onStatusChanged);
+
     countdown.start();
     countdown.stop();
+
     expect(countdown.status, CountdownStatus.notStarted);
+    verify(timerMock.onStatusChanged(CountdownStatus.running)).called(1);
+    verify(timerMock.onStatusChanged(CountdownStatus.notStarted)).called(1);
   });
 }

@@ -4,9 +4,8 @@
 
 - [x] Start countdown
 - [x] Pause countdown
-- [ ] Stop countdown
-- [ ] Reset countdown
-- [ ] Reset countdown
+- [x] Stop countdown
+- [x] Reset countdown
 - [ ] Resume countdown
 - [ ] Change duration
 - [ ] Listen time
