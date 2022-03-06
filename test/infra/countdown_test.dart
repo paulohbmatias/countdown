@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:countdown/countdown.dart';
 import 'package:countdown/src/domain/countdown_status.dart';
@@ -173,5 +174,26 @@ void main() {
     expect(countdown.status, CountdownStatus.notStarted);
     verify(timerMock.onStatusChanged(CountdownStatus.running)).called(1);
     verify(timerMock.onStatusChanged(CountdownStatus.notStarted)).called(1);
+  });
+
+  test("Should test if Countdown resume time", () {
+    when(timerMock.onStatusChanged(CountdownStatus.running)).thenReturn((_) {});
+    when(timerMock.onStatusChanged(CountdownStatus.paused)).thenReturn((_) {});
+
+    countdown.onStatusChanged(timerMock.onStatusChanged);
+
+    countdown.start();
+    countdown.pause();
+    countdown.start();
+
+    expect(countdown.status, CountdownStatus.running);
+
+    verifyInOrder([
+      timerMock.onStatusChanged(CountdownStatus.running),
+      timerMock.onStatusChanged(CountdownStatus.paused),
+      timerMock.onStatusChanged(CountdownStatus.running)
+    ]);
+
+    verifyNoMoreInteractions(timerMock);
   });
 }

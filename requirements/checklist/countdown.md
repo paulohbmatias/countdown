@@ -6,7 +6,7 @@
 - [x] Pause countdown
 - [x] Stop countdown
 - [x] Reset countdown
-- [ ] Resume countdown
+- [x] Resume countdown
 - [ ] Change duration
 - [ ] Listen time
 - [ ] Listen status
