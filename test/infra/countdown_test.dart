@@ -46,7 +46,6 @@ class CountdownTimer implements Countdown {
   }
 
   @override
-  // TODO: implement remaningTime
   Duration get remaningTime => throw UnimplementedError();
 
   @override
@@ -204,5 +203,16 @@ void main() {
     countdown.duration = duration;
 
     expect(countdown.duration, duration);
+  });
+
+  test("Should test listen time", () async {
+    when(timerMock.onTimeChanged).thenReturn((p0) {});
+
+    countdown.onTimeChanged(timerMock.onTimeChanged);
+
+    countdown.start();
+
+    expect(countdown.status, CountdownStatus.running);
+    await untilCalled(timerMock.onTimeChanged);
   });
 }
