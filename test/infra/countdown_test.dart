@@ -16,9 +16,12 @@ class CountdownTimer implements Countdown {
   void Function(CountdownStatus)? onStatusCallback;
   void Function(Duration)? onTimeChangedCallback;
   late Timer timer;
+  Duration _duration;
+
+  CountdownTimer(this._duration);
 
   @override
-  Duration get duration => throw UnimplementedError();
+  Duration get duration => _duration;
 
   @override
   onDone() {
@@ -55,9 +58,8 @@ class CountdownTimer implements Countdown {
   }
 
   @override
-  setDuration(Duration duration) {
-    // TODO: implement setDuration
-    throw UnimplementedError();
+  set duration(Duration duration) {
+    _duration = duration;
   }
 
   @override
@@ -110,7 +112,7 @@ void main() {
   late TimerFake timerMock;
 
   setUp(() {
-    countdown = CountdownTimer();
+    countdown = CountdownTimer(const Duration(seconds: 3));
     timerMock = MockTimerFake();
   });
 
@@ -195,5 +197,12 @@ void main() {
     ]);
 
     verifyNoMoreInteractions(timerMock);
+  });
+
+  test("Should reset duration", () {
+    Duration duration = const Duration(seconds: 1);
+    countdown.duration = duration;
+
+    expect(countdown.duration, duration);
   });
 }

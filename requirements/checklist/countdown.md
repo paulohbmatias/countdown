@@ -7,7 +7,7 @@
 - [x] Stop countdown
 - [x] Reset countdown
 - [x] Resume countdown
-- [ ] Change duration
+- [x] Change duration
 - [ ] Listen time
 - [ ] Listen status
 - [ ] Get durantion

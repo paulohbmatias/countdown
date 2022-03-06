@@ -5,7 +5,7 @@ abstract class Countdown {
   Duration get duration;
   Duration get remaningTime;
   void reset();
-  void setDuration(Duration duration);
+  set duration(Duration duration);
   void stop();
   void start();
   void pause();
