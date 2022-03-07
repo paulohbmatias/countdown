@@ -7,7 +7,6 @@ import 'package:countdown/src/infra/countdown_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:fake_async/fake_async.dart';
 
 import 'countdown_test.mocks.dart';
 

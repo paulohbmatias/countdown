@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:clock/clock.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../domain/countdown.dart';
