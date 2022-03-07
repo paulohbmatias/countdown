@@ -1,4 +1,5 @@
 // ignore_for_file: void_checks
+import 'package:clock/clock.dart';
 import 'package:countdown/countdown.dart';
 import 'package:countdown/src/domain/countdown_exception.dart';
 import 'package:countdown/src/domain/countdown_status.dart';
@@ -6,6 +7,7 @@ import 'package:countdown/src/infra/countdown_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:fake_async/fake_async.dart';
 
 import 'countdown_test.mocks.dart';
 
@@ -23,8 +25,9 @@ void main() {
   late Duration countDuration;
 
   setUp(() {
+    final stopwatch = clock.stopwatch();
     countDuration = const Duration(seconds: 3);
-    countdown = CountdownTimer(countDuration);
+    countdown = CountdownTimer(countDuration, stopwatch: stopwatch);
     timerMock = MockTimerFake();
   });
 
@@ -170,6 +173,21 @@ void main() {
 
     expect(countdown.status, CountdownStatus.running);
     await untilCalled(timerMock.onDone);
+  });
+
+  test("Test if countdown count the duration to 0", () async {
+    when(timerMock.onTimeChanged).thenReturn((p0) {});
+    when(timerMock.onDone()).thenReturn(() {});
+
+    countdown.duration = const Duration(seconds: 2);
+
+    countdown.onTimeChanged((d) => timerMock.onTimeChanged);
+    countdown.onDone(() => timerMock.onDone());
+    countdown.start();
+
+    await untilCalled(timerMock.onDone());
+
+    verify(timerMock.onTimeChanged).called(greaterThan(1));
   });
 
   test("Shoul throw exception if try pause countdonw but it's not initialized",

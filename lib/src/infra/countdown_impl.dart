@@ -11,6 +11,7 @@ import '../domain/countdown_status.dart';
 class CountdownTimer implements Countdown {
   final _statusController = BehaviorSubject<CountdownStatus>();
   final _durationController = BehaviorSubject<Duration>();
+  final Stopwatch stopwatch;
 
   void Function(CountdownStatus)? onStatusCallback;
   void Function(Duration)? onTimeChangedCallback;
@@ -18,7 +19,10 @@ class CountdownTimer implements Countdown {
   late Timer timer;
   Duration _duration;
 
-  CountdownTimer(this._duration);
+  CountdownTimer(
+    this._duration, {
+    required this.stopwatch,
+  });
 
   @override
   Duration get duration => _duration;
@@ -41,7 +45,7 @@ class CountdownTimer implements Countdown {
   @override
   pause() {
     _verifyInitialized();
-    clock.stopwatch().stop();
+    stopwatch.stop();
     _setStatus(CountdownStatus.paused);
   }
 
@@ -51,8 +55,8 @@ class CountdownTimer implements Countdown {
 
   @override
   void reset() {
-    clock.stopwatch().stop();
-    clock.stopwatch().reset();
+    stopwatch.stop();
+    stopwatch.reset();
 
     _durationController.add(duration);
 
@@ -66,7 +70,7 @@ class CountdownTimer implements Countdown {
 
   @override
   start() {
-    clock.stopwatch().start();
+    stopwatch.start();
     _statusController.add(CountdownStatus.running);
     if (onStatusCallback != null) {
       onStatusCallback!(_statusController.value);
@@ -91,17 +95,16 @@ class CountdownTimer implements Countdown {
 
   _listenTime() {
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (onTimeChangedCallback != null) {
-        final elapsed = clock.stopwatch().elapsed;
-
-        if (elapsed.isNegative) {
-          if (_onDone != null) {
-            _onDone!();
-          }
-          reset();
+      final remaining = _duration.inSeconds - stopwatch.elapsed.inSeconds;
+      if (remaining.isNegative) {
+        if (_onDone != null) {
+          _onDone!();
         }
-
-        _durationController.add(_duration - elapsed);
+        reset();
+        return;
+      }
+      _durationController.add(Duration(seconds: remaining));
+      if (onTimeChangedCallback != null) {
         onTimeChangedCallback!(_durationController.value);
       }
     });
@@ -115,8 +118,8 @@ class CountdownTimer implements Countdown {
   @override
   stop() {
     _verifyInitialized();
-    clock.stopwatch().stop();
-    clock.stopwatch().reset();
+    stopwatch.stop();
+    stopwatch.reset();
     _setStatus(CountdownStatus.notStarted);
   }
 }
