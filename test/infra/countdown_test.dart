@@ -3,7 +3,6 @@ import 'package:clock/clock.dart';
 import 'package:countdown/countdown.dart';
 import 'package:countdown/src/domain/countdown_exception.dart';
 import 'package:countdown/src/domain/countdown_status.dart';
-import 'package:countdown/src/infra/countdown_impl.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -39,7 +38,7 @@ void main() {
 
       countdown.onStatusChanged(timerMock.onStatusChanged);
       countdown.onTimeChanged(timerMock.onTimeChanged);
-      countdown.start();
+      countdown.play();
       expect(countdown.status, CountdownStatus.running);
       verify(timerMock.onStatusChanged(CountdownStatus.running)).called(1);
       verify(timerMock.onTimeChanged).called(greaterThan(0));
@@ -53,7 +52,7 @@ void main() {
     countdown.onStatusChanged(timerMock.onStatusChanged);
     countdown.onTimeChanged(timerMock.onTimeChanged);
 
-    countdown.start();
+    countdown.play();
     countdown.pause();
 
     expect(countdown.status, CountdownStatus.paused);
@@ -70,7 +69,7 @@ void main() {
     countdown.onStatusChanged(timerMock.onStatusChanged);
     countdown.onTimeChanged(timerMock.onTimeChanged);
 
-    countdown.start();
+    countdown.play();
     countdown.reset();
 
     expect(countdown.status, CountdownStatus.notStarted);
@@ -85,7 +84,7 @@ void main() {
 
     countdown.onStatusChanged(timerMock.onStatusChanged);
 
-    countdown.start();
+    countdown.play();
     countdown.stop();
 
     expect(countdown.status, CountdownStatus.notStarted);
@@ -99,9 +98,9 @@ void main() {
 
     countdown.onStatusChanged(timerMock.onStatusChanged);
 
-    countdown.start();
+    countdown.play();
     countdown.pause();
-    countdown.start();
+    countdown.play();
 
     expect(countdown.status, CountdownStatus.running);
 
@@ -126,7 +125,7 @@ void main() {
 
     countdown.onTimeChanged(timerMock.onTimeChanged);
 
-    countdown.start();
+    countdown.play();
 
     expect(countdown.status, CountdownStatus.running);
     await untilCalled(timerMock.onTimeChanged);
@@ -138,7 +137,7 @@ void main() {
 
     countdown.onStatusChanged(timerMock.onStatusChanged);
 
-    countdown.start();
+    countdown.play();
 
     expect(countdown.status, CountdownStatus.running);
     await untilCalled(timerMock.onStatusChanged(CountdownStatus.running));
@@ -164,11 +163,12 @@ void main() {
 
   test("Should test listen onDone", () async {
     when(timerMock.onDone).thenReturn(() {});
-
+    when(timerMock.onTimeChanged).thenReturn((p0) {});
     countdown.onDone(timerMock.onDone);
+    countdown.onTimeChanged(timerMock.onTimeChanged);
 
     countdown.duration = const Duration(seconds: 1);
-    countdown.start();
+    countdown.play();
 
     expect(countdown.status, CountdownStatus.running);
     await untilCalled(timerMock.onDone);
@@ -182,7 +182,7 @@ void main() {
 
     countdown.onTimeChanged((d) => timerMock.onTimeChanged);
     countdown.onDone(() => timerMock.onDone());
-    countdown.start();
+    countdown.play();
 
     await untilCalled(timerMock.onDone());
 
