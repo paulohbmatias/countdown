@@ -7,7 +7,7 @@ abstract class Countdown {
   void reset();
   set duration(Duration duration);
   void stop();
-  void start();
+  void play();
   void pause();
   void onTimeChanged(void Function(Duration) callback);
   void onStatusChanged(void Function(CountdownStatus) callback);

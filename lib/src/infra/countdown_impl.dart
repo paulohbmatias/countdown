@@ -54,11 +54,16 @@ class CountdownTimer implements Countdown {
 
   @override
   void reset() {
+    stop();
+    _durationController.add(duration);
+  }
+
+  @override
+  stop() {
+    _verifyInitialized();
+    timer.cancel();
     stopwatch.stop();
     stopwatch.reset();
-
-    _durationController.add(duration);
-
     _setStatus(CountdownStatus.notStarted);
   }
 
@@ -68,13 +73,12 @@ class CountdownTimer implements Countdown {
   }
 
   @override
-  start() {
-    stopwatch.start();
-    _statusController.add(CountdownStatus.running);
-    if (onStatusCallback != null) {
-      onStatusCallback!(_statusController.value);
+  play() {
+    if (status == CountdownStatus.notStarted) {
+      _listenTime();
     }
-    _listenTime();
+    stopwatch.start();
+    _setStatus(CountdownStatus.running);
   }
 
   void _setStatus(CountdownStatus status) {
@@ -113,12 +117,4 @@ class CountdownTimer implements Countdown {
   CountdownStatus get status => _statusController.hasValue
       ? _statusController.value
       : CountdownStatus.notStarted;
-
-  @override
-  stop() {
-    _verifyInitialized();
-    stopwatch.stop();
-    stopwatch.reset();
-    _setStatus(CountdownStatus.notStarted);
-  }
 }
