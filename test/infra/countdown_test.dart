@@ -3,9 +3,9 @@ import 'package:clock/clock.dart';
 import 'package:countdown/countdown.dart';
 import 'package:countdown/src/domain/countdown_exception.dart';
 import 'package:countdown/src/domain/countdown_status.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/test.dart';
 
 import 'countdown_test.mocks.dart';
 
