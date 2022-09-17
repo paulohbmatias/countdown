@@ -42,8 +42,11 @@ jobs:
       - name: Activate very good cli
         run: dart pub global activate very_good_cli
       
+      - name: Very good analytics
+        run: very_good --analytics false
+
       - name: Run tests
-        run: very_good test --coverage --min-coverage 85 -y
+        run: very_good test --coverage --min-coverage 85
         
       # - name: Verify tests coverage
       #   env:
