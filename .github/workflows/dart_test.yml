@@ -41,8 +41,3 @@ jobs:
 
       - name: Run tests
         run: dart test --coverage coverage
-        
-      - name: Verify tests coverage
-        env:
-          CODECOVTOKEN: ${{ secrets.CODECOVTOKEN }}
-        run: curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && ./codecov -t $CODECOVTOKEN
