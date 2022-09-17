@@ -38,10 +38,14 @@ jobs:
       # Your project will need to have tests in test/ and a dependency on
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
+
+      - name: Activate very good cli
+        run: dart pub global activate very_good_cli
+      
       - name: Run tests
-        run: dart test --coverage coverage
+        run: very_good test --coverage --min-coverage 85
         
-      - name: Verify tests coverage
-        env:
-          CODECOVTOKEN: ${{ secrets.CODECOVTOKEN }}
-        run: curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && ./codecov -t $CODECOVTOKEN
+      # - name: Verify tests coverage
+      #   env:
+      #     CODECOVTOKEN: ${{ secrets.CODECOVTOKEN }}
+      #   run: curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && ./codecov -t $CODECOVTOKEN
