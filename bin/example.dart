@@ -16,9 +16,9 @@ void main(List<String> arguments) async {
 
   countdown.play();
 
-  await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(const Duration(seconds: 3));
 
-  countdown.pause();
+  countdown.stop();
 
   await Future.delayed(const Duration(seconds: 2));
 

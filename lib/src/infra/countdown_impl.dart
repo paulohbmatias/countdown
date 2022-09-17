@@ -65,6 +65,7 @@ class CountdownTimer implements Countdown {
     stopwatch.stop();
     stopwatch.reset();
     _setStatus(CountdownStatus.notStarted);
+    _durationController.add(duration);
   }
 
   @override
