@@ -189,13 +189,13 @@ void main() {
     verify(timerMock.onTimeChanged).called(greaterThan(1));
   });
 
-  // test("Shoul throw exception if try pause countdonw but it's not initialized",
-  //     () {
-  //   expect(() => countdown.pause(), throwsA(isA<CountdownException>()));
-  // });
+  test("Shoul throw exception if try pause countdonw but it's not initialized",
+      () {
+    expect(() => countdown.pause(), throwsA(isA<CountdownException>()));
+  });
 
-  // test("Shoul throw exception if try stop countdonw but it's not initialized",
-  //     () {
-  //   expect(() => countdown.stop(), throwsA(isA<CountdownException>()));
-  // });
+  test("Shoul throw exception if try stop countdonw but it's not initialized",
+      () {
+    expect(() => countdown.stop(), throwsA(isA<CountdownException>()));
+  });
 }
