@@ -44,7 +44,7 @@ jobs:
 
       - name: Add token
         env:
-          CLOUDSMITHTOKEN: ${{ secrets.CLOUDSMITH_TOKEN }}
+          CLOUDSMITHTOKEN: ${{ secrets.CLOUDSMITHTOKEN }}
         run: dart pub token add https://dart.cloudsmith.io/phbm/packages/ --env-var CLOUDSMITHTOKEN
 
       - name: Publish package
