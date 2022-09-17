@@ -41,3 +41,9 @@ jobs:
 
       - name: Run tests
         run: dart test --coverage coverage
+
+      - name: Add token
+        run: dart pub token add https://dart.cloudsmith.io/phbm/pomodoro/ --env-var CLOUDSMITH_TOKEN
+
+      - name: Publish package
+        run: dart publish
