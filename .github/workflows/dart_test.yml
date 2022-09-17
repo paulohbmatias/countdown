@@ -48,4 +48,6 @@ jobs:
         run: dart pub token add https://dart.cloudsmith.io/phbm/packages/ --env-var CLOUDSMITHTOKEN
 
       - name: Publish package
+        env:
+          CLOUDSMITHTOKEN: ${{ secrets.CLOUDSMITH_TOKEN }}
         run: dart pub lish -f
