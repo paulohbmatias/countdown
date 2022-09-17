@@ -39,16 +39,10 @@ jobs:
       # package:test for this step to succeed. Note that Flutter projects will
       # want to change this to 'flutter test'.
 
-      - name: Activate very good cli
-        run: dart pub global activate very_good_cli
-      
-      - name: Very good analytics
-        run: very_good --analytics true
-
       - name: Run tests
-        run: very_good test --coverage --min-coverage 85
+        run: dart test --coverage
         
-      # - name: Verify tests coverage
-      #   env:
-      #     CODECOVTOKEN: ${{ secrets.CODECOVTOKEN }}
-      #   run: curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && ./codecov -t $CODECOVTOKEN
+      - name: Verify tests coverage
+        env:
+          CODECOVTOKEN: ${{ secrets.CODECOVTOKEN }}
+        run: curl -Os https://uploader.codecov.io/latest/linux/codecov && chmod +x codecov && ./codecov -t $CODECOVTOKEN

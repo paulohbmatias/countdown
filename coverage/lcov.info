@@ -1,7 +1,7 @@
 SF:lib/src/domain/countdown_exception.dart
-DA:6,1
+DA:6,0
 LF:1
-LH:1
+LH:0
 end_of_record
 SF:lib/src/infra/countdown_impl.dart
 DA:21,1
@@ -41,7 +41,7 @@ DA:86,1
 DA:87,4
 DA:91,1
 DA:92,2
-DA:93,1
+DA:93,0
 DA:99,1
 DA:100,3
 DA:101,6
@@ -56,5 +56,5 @@ DA:116,1
 DA:117,2
 DA:118,2
 LF:51
-LH:51
+LH:50
 end_of_record
