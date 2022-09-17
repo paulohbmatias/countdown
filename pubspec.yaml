@@ -1,8 +1,9 @@
 name: countdown
 description: A new Flutter package project.
 version: 0.0.2
-homepage:
-publish_to: https://dart.cloudsmith.io/phbm/pomodoro/
+homepage: https://github.com/paulohbmatias/countdown
+repository: https://github.com/paulohbmatias/countdown
+publish_to: https://dart.cloudsmith.io/phbm/packages/
 
 
 environment:

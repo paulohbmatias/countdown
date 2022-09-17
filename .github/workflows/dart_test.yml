@@ -43,7 +43,9 @@ jobs:
         run: dart test --coverage coverage
 
       - name: Add token
-        run: dart pub token add https://dart.cloudsmith.io/phbm/pomodoro/ --env-var CLOUDSMITH_TOKEN
+        env:
+          CLOUDSMITHTOKEN: ${{ secrets.CLOUDSMITH_TOKEN }}
+        run: dart pub token add https://dart.cloudsmith.io/phbm/packages/ --env-var CLOUDSMITHTOKEN
 
       - name: Publish package
-        run: dart publish
+        run: dart pub lish -f
