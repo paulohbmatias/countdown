@@ -71,6 +71,7 @@ class CountdownTimer implements Countdown {
   @override
   set duration(Duration duration) {
     _duration = duration;
+    _durationController.add(duration);
   }
 
   @override
