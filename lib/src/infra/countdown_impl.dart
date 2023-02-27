@@ -10,6 +10,7 @@ import '../domain/countdown_status.dart';
 class CountdownTimer implements Countdown {
   final _statusController = BehaviorSubject<CountdownStatus>();
   final _durationController = BehaviorSubject<Duration>();
+  DateTime? _startTime;
   final Stopwatch stopwatch;
 
   void Function(CountdownStatus)? onStatusCallback;
@@ -56,6 +57,8 @@ class CountdownTimer implements Countdown {
   void reset() {
     stop();
     _durationController.add(duration);
+    _setStatus(CountdownStatus.notStarted);
+    _startTime = null;
   }
 
   @override
@@ -66,6 +69,7 @@ class CountdownTimer implements Countdown {
     stopwatch.reset();
     _setStatus(CountdownStatus.notStarted);
     _durationController.add(duration);
+    _startTime = null;
   }
 
   @override
@@ -79,6 +83,7 @@ class CountdownTimer implements Countdown {
     if (status == CountdownStatus.notStarted) {
       _listenTime();
     }
+    _startTime = DateTime.now();
     stopwatch.start();
     _setStatus(CountdownStatus.running);
   }
@@ -99,8 +104,15 @@ class CountdownTimer implements Countdown {
   }
 
   _listenTime() {
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      final remaining = _duration.inSeconds - stopwatch.elapsed.inSeconds;
+    _durationController.add(_duration - Duration(seconds: 1));
+    onTimeChangedCallback!(_durationController.value);
+    timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      if (_startTime == null) {
+        stop();
+        return;
+      }
+      final now = DateTime.now();
+      final remaining = _duration - now.difference(_startTime!);
       if (remaining.isNegative) {
         if (_onDone != null) {
           _onDone!();
@@ -108,7 +120,7 @@ class CountdownTimer implements Countdown {
         reset();
         return;
       }
-      _durationController.add(Duration(seconds: remaining));
+      _durationController.add(remaining);
       if (onTimeChangedCallback != null) {
         onTimeChangedCallback!(_durationController.value);
       }
